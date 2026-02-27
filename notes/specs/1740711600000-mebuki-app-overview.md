@@ -1,10 +1,10 @@
 ---
 title: Mebuki アプリ設計概要
-status: raw
+status: refining
 category: specs
 ai_review: false
 createdAt: '2026-02-28T03:00:00.000Z'
-updatedAt: '2026-02-27T20:26:04.344Z'
+updatedAt: '2026-02-27T20:26:05.427Z'
 ---
 ## アーキテクチャ
 
