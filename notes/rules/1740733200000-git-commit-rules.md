@@ -1,12 +1,11 @@
 ---
 title: Git コミットメッセージ規約
-status: refining
+status: stable
 category: rules
-ai_review: false
-createdAt: "2026-02-28T09:00:00.000Z"
-updatedAt: "2026-02-28T09:00:00.000Z"
+ai_outcome: none
+createdAt: '2026-02-28T09:00:00.000Z'
+updatedAt: '2026-02-27T21:21:15.070Z'
 ---
-
 ## プレフィックス
 
 | プレフィックス | 用途 |
