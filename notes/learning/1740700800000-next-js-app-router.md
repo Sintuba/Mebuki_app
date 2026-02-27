@@ -1,10 +1,10 @@
 ---
 title: Next.js App Router 基礎
-status: stable
+status: refining
 category: learning
 ai_review: false
 createdAt: '2026-02-28T00:00:00.000Z'
-updatedAt: '2026-02-27T15:39:51.170Z'
+updatedAt: '2026-02-27T16:04:19.549Z'
 id: 1740700800000-next-js-app-router
 slug: learning/1740700800000-next-js-app-router
 content: |-
@@ -31,7 +31,7 @@ content: |-
 
   `(app)` のように括弧で囲んだディレクトリは URL に影響しない。
   レイアウトのグルーピングに使う。
-sha: a0694801f96e945df3100636c5e437d98445fd59
+sha: 8bfa30f7a607dede13cdbb308e07c73cb4e3bf14
 ---
 ## App Router とは
 
