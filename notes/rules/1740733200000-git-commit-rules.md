@@ -1,10 +1,10 @@
 ---
 title: Git コミットメッセージ規約
-status: stable
+status: raw
 category: rules
-ai_outcome: none
+ai_outcome: keep
 createdAt: '2026-02-28T09:00:00.000Z'
-updatedAt: '2026-02-27T21:21:57.956Z'
+updatedAt: '2026-02-27T21:22:07.945Z'
 ---
 ## プレフィックス
 
