@@ -1,10 +1,10 @@
 ---
 title: GitHub API 連携設計
-status: refining
+status: stable
 category: specs
 ai_review: false
 createdAt: '2026-02-28T04:00:00.000Z'
-updatedAt: '2026-02-27T20:17:08.111Z'
+updatedAt: '2026-02-27T20:17:10.628Z'
 ---
 ## エンドポイント
 
