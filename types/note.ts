@@ -1,5 +1,5 @@
 export type NoteStatus = 'raw' | 'refining' | 'stable';
-export type NoteCategory = 'learning' | 'specs';
+export type NoteCategory = 'learning' | 'specs' | 'snippets' | 'logs' | 'rules';
 
 export interface NoteFrontmatter {
   title: string;
