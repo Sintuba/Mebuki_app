@@ -1,10 +1,10 @@
 ---
 title: React Hooks パターン集
-status: refining
+status: stable
 category: learning
 ai_review: false
 createdAt: '2026-02-28T02:00:00.000Z'
-updatedAt: '2026-02-27T15:33:17.715Z'
+updatedAt: '2026-02-27T15:33:22.241Z'
 id: 1740708000000-react-hooks-patterns
 slug: learning/1740708000000-react-hooks-patterns
 content: |-
@@ -44,7 +44,7 @@ content: |-
     // ...
   }
   ```
-sha: daaa49561c9322eed7f4b9c17067a5226efefe4c
+sha: bf83cf273a0d5ef758ed6ca177628c133c47d8ed
 ---
 ## useEffect の依存配列
 
