@@ -1,10 +1,10 @@
 ---
 title: Next.js App Router 基礎
-status: refining
+status: raw
 category: learning
-ai_review: false
+ai_outcome: none
 createdAt: '2026-02-28T00:00:00.000Z'
-updatedAt: '2026-02-27T20:26:44.843Z'
+updatedAt: '2026-02-27T22:15:47.544Z'
 ---
 ## App Router とは
 
