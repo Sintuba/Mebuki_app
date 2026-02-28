@@ -1,12 +1,12 @@
 ---
 title: Tailwind よく使うユーティリティ
-status: stable
+status: refining
 category: snippets
-ai_review: false
-createdAt: "2026-02-28T05:00:00.000Z"
-updatedAt: "2026-02-28T05:00:00.000Z"
+ai_outcome: none
+ai_reviewed: false
+createdAt: '2026-02-28T05:00:00.000Z'
+updatedAt: '2026-02-28T10:06:27.056Z'
 ---
-
 ## レイアウト
 
 ```
