@@ -1,11 +1,11 @@
 ---
 title: TypeScript ジェネリクス入門
-status: refining
+status: raw
 category: learning
 ai_outcome: none
 ai_reviewed: false
 createdAt: '2026-02-28T01:00:00.000Z'
-updatedAt: '2026-02-28T09:31:10.430Z'
+updatedAt: '2026-02-28T09:31:54.257Z'
 ---
 ## ジェネリクスとは
 
