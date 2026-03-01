@@ -5,7 +5,7 @@ category: specs
 ai_outcome: keep
 ai_reviewed: true
 createdAt: '2026-01-25T05:00:00.000Z'
-updatedAt: '2026-03-01T06:48:12.977Z'
+updatedAt: '2026-03-01T11:20:14.234Z'
 ---
 ## 概要
 
@@ -45,3 +45,5 @@ types/note.ts     # 型定義
 2. サーバーコンポーネントで `cachedListNotes(token)` を呼ぶ
 3. GitHub リポジトリの `notes/{category}/{id}.md` を読む
 4. CRUD は `/api/notes` Route Handler 経由で実行
+
+この内容はすでに古いものとなっており現在の仕様に書き換える必要あり
