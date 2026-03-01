@@ -1,16 +1,11 @@
 import Link from "next/link";
+import Logo from "@/components/ui/Logo";
 
 export default function MainHeader() {
   return (
-    <header className="hidden md:flex h-12 border-b border-border items-center px-4 justify-between bg-background shrink-0">
-      <Link
-        href="/home"
-        className="flex items-center gap-2 text-sm font-bold text-foreground hover:opacity-80 transition-opacity"
-      >
-        <span className="size-6 rounded bg-primary flex items-center justify-center text-primary-foreground text-xs font-bold">
-          TR
-        </span>
-        Thought Refinery
+    <header className="hidden md:flex h-12 border-b border-border items-center px-4 justify-between bg-background shrink-0 sticky top-0 z-30">
+      <Link href="/home" className="hover:opacity-80 transition-opacity">
+        <Logo size={28} variant="wordmark" />
       </Link>
       <nav className="flex items-center gap-1">
         <Link

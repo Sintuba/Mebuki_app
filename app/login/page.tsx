@@ -1,4 +1,5 @@
 import { signIn } from "@/lib/auth";
+import { AnimatedLogo } from "@/components/ui/AnimatedLogo";
 
 export default function LoginPage() {
   return (
@@ -15,16 +16,11 @@ export default function LoginPage() {
       />
 
       <section className="relative z-10 flex flex-col items-center gap-8 px-6">
-        {/* ロゴ + タイトル */}
-        <div className="flex flex-col items-center gap-4">
-          <div className="size-12 rounded-xl bg-primary flex items-center justify-center">
-            <span className="text-sm font-bold text-primary-foreground">TR</span>
-          </div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            Thought Refinery
-          </h1>
-          <p className="text-sm text-muted-foreground text-center max-w-xs leading-relaxed">
-            殴り書きの思考を、構造化されたナレッジに昇華する
+        {/* アニメーションロゴ + サブタイトル */}
+        <div className="flex flex-col items-center gap-5">
+          <AnimatedLogo size={64} autoPlay />
+          <p className="text-xs text-muted-foreground whitespace-nowrap">
+            思考の小さな芽を、構造化されたナレッジに昇華する
           </p>
         </div>
 
@@ -37,7 +33,7 @@ export default function LoginPage() {
         >
           <button
             type="submit"
-            className="inline-flex items-center justify-center gap-2.5 h-11 px-6 rounded-lg text-sm font-medium bg-foreground text-background hover:bg-foreground/90 transition-colors"
+            className="inline-flex items-center justify-center gap-2.5 h-11 px-6 rounded-lg text-sm font-medium bg-green-500 text-white hover:bg-green-600 transition-colors"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import { Geist_Mono } from 'next/font/google'
 import './globals.css'
+import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister'
+import { Providers } from './providers'
 
 const geistMono = Geist_Mono({
   subsets: ['latin'],
@@ -8,12 +10,21 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Thought Refinery',
-  description: '殴り書きの思考を、構造化されたナレッジに昇華する',
+  title: 'MEBUKI',
+  description: '思考の小さな芽を、構造化されたナレッジに昇華する',
+  manifest: '/manifest.json',
+  icons: {
+    apple: '/apple-touch-icon.png',
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'MEBUKI',
+  },
 }
 
 export const viewport: Viewport = {
-  themeColor: '#ffffff',
+  themeColor: '#22C55E',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -28,7 +39,8 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${geistMono.variable} font-mono antialiased`}>
-        {children}
+        <ServiceWorkerRegister />
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

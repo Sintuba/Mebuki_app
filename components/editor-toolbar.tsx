@@ -1,130 +1,147 @@
-"use client";
+'use client'
 
-import type { NoteStatus } from "@/types/note";
+import { useState } from 'react'
+import type { NoteStatus, AiOutcome, AiEditRecord } from '@/types/note'
+import { STATUS_LABELS } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 
-const STATUS_LABELS: Record<NoteStatus, string> = {
-  raw: "未整理",
-  refining: "整理中",
-  stable: "完成",
-};
-
-const STATUS_ORDER: NoteStatus[] = ["raw", "refining", "stable"];
-
-interface ToggleButtonProps {
-  active: boolean;
-  onToggle: () => void;
-  label: string;
-}
-
-function ToggleButton({ active, onToggle, label }: ToggleButtonProps) {
-  return (
-    <button
-      onClick={onToggle}
-      className={`text-[10px] px-2 py-1 rounded transition-colors ${
-        active
-          ? "bg-foreground text-background"
-          : "text-muted-foreground hover:text-foreground border border-border"
-      }`}
-    >
-      {label}
-    </button>
-  );
-}
+const STATUS_ORDER: NoteStatus[] = ['raw', 'refining', 'stable']
 
 interface EditorToolbarProps {
-  aiReview: boolean;
-  onAiReviewChange: (v: boolean) => void;
-  promoteCandidate: boolean;
-  onPromoteCandidateChange: (v: boolean) => void;
-  keep: boolean;
-  onKeepChange: (v: boolean) => void;
-  hasChanges: boolean;
-  hasContent: boolean;
-  status: NoteStatus;
-  saving?: boolean;
-  onSave: () => void;
-  onPromote: () => void;
-  onDemote: () => void;
-  onYamlCopy: () => void;
+  aiOutcome: AiOutcome
+  onAiOutcomeChange: (v: AiOutcome) => void
+  aiReviewed: boolean
+  aiEdits?: AiEditRecord[]
+  hasChanges: boolean
+  hasContent: boolean
+  status: NoteStatus
+  saving?: boolean
+  onSave: () => void
+  onPromote: () => void
+  onDemote: () => void
+  onYamlCopy: () => void
+}
+
+function AiOutcomeControl({ value, onChange, compact = false }: {
+  value: AiOutcome; onChange: (v: AiOutcome) => void; compact?: boolean
+}) {
+  const segments: { key: AiOutcome; label: string; shortLabel: string; activeClass: string }[] = [
+    { key: 'none',    label: 'AI なし', shortLabel: '-',   activeClass: 'bg-muted text-foreground' },
+    { key: 'promote', label: 'AI昇華',  shortLabel: 'AI↑', activeClass: 'bg-green-500 text-white' },
+    { key: 'keep',    label: 'AI保持',  shortLabel: 'AI保', activeClass: 'bg-amber-400 text-white' },
+  ]
+  return (
+    <div className="flex items-center border border-border rounded-full overflow-hidden shrink-0 text-[11px]">
+      {segments.map((seg, i) => (
+        <button key={seg.key} onClick={() => onChange(seg.key)} title={seg.label}
+          className={cn('transition-colors font-medium', compact ? 'px-2 h-7' : 'px-2.5 h-7',
+            i > 0 && 'border-l border-border',
+            value === seg.key ? seg.activeClass : 'text-muted-foreground hover:text-foreground hover:bg-muted/50')}>
+          {compact ? seg.shortLabel : seg.label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function AiEditsPopover({ aiEdits }: { aiEdits: AiEditRecord[] }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="relative shrink-0">
+      <button onClick={() => setOpen(v => !v)}
+        className="flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded border border-violet-200 bg-violet-50 text-violet-600 hover:bg-violet-100 transition-colors">
+        <span>✦</span><span>変更履歴 {aiEdits.length}</span>
+      </button>
+      {open && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+          <div className="absolute bottom-full right-0 mb-2 z-50 min-w-60 max-w-80 bg-background border border-border rounded-xl shadow-lg p-3 space-y-1.5">
+            <p className="text-[10px] text-muted-foreground font-medium mb-2">AI変更履歴</p>
+            {aiEdits.map((edit, i) => (
+              <div key={i} className="flex items-start gap-2 text-[11px]">
+                <span className="text-muted-foreground/60 shrink-0 tabular-nums whitespace-nowrap">
+                  {new Date(edit.at).toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                </span>
+                <span className="text-foreground/80 leading-relaxed">{edit.summary}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  )
 }
 
 export function EditorToolbar({
-  aiReview,
-  onAiReviewChange,
-  promoteCandidate,
-  onPromoteCandidateChange,
-  keep,
-  onKeepChange,
-  hasChanges,
-  hasContent,
-  status,
-  saving = false,
-  onSave,
-  onPromote,
-  onDemote,
-  onYamlCopy,
+  aiOutcome, onAiOutcomeChange, aiReviewed, aiEdits = [],
+  hasChanges, hasContent, status, saving = false,
+  onSave, onPromote, onDemote, onYamlCopy,
 }: EditorToolbarProps) {
-  const currentIdx = STATUS_ORDER.indexOf(status);
-  const canPromote = currentIdx < STATUS_ORDER.length - 1;
-  const canDemote = currentIdx > 0;
+  const currentIdx = STATUS_ORDER.indexOf(status)
+  const canPromote = currentIdx < STATUS_ORDER.length - 1
+  const canDemote  = currentIdx > 0
+  const promoteEnabled = canPromote && hasContent && aiReviewed
+  const promoteTitle = !aiReviewed ? 'AIレビューを受けると昇華できます' : undefined
 
   return (
-    <div className="shrink-0 border-t border-border px-4 py-2 flex items-center gap-2 bg-background">
-      {/* トグル */}
-      <div className="flex items-center gap-1.5">
-        <ToggleButton
-          active={aiReview}
-          onToggle={() => onAiReviewChange(!aiReview)}
-          label="AI"
-        />
-        <ToggleButton
-          active={promoteCandidate}
-          onToggle={() => onPromoteCandidateChange(!promoteCandidate)}
-          label="候補"
-        />
-        <ToggleButton
-          active={keep}
-          onToggle={() => onKeepChange(!keep)}
-          label="保持"
-        />
+    <div className="shrink-0 border-t border-border bg-background">
+      {/* SP: 1行 */}
+      <div className="flex md:hidden items-center gap-1.5 px-3 h-12">
+        <AiOutcomeControl value={aiOutcome} onChange={onAiOutcomeChange} compact />
+        <div className="flex-1" />
+        {canDemote && (
+          <button onClick={onDemote}
+            className="text-xs text-muted-foreground hover:text-foreground px-2 h-8 rounded border border-border transition-colors shrink-0">↓</button>
+        )}
+        <button onClick={onSave} disabled={saving || !hasChanges}
+          className={cn('text-xs px-3 h-8 rounded border transition-colors shrink-0',
+            hasChanges && !saving ? 'border-foreground text-foreground' : 'border-border text-muted-foreground',
+            'disabled:cursor-not-allowed disabled:opacity-50')}>
+          {saving ? '…' : hasChanges ? '保存' : '済み'}
+        </button>
+        {canPromote && hasContent && (
+          <button onClick={promoteEnabled ? onPromote : undefined} disabled={!promoteEnabled} title={promoteTitle}
+            className={cn('text-xs px-3 h-8 rounded transition-colors shrink-0',
+              promoteEnabled ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'bg-muted text-muted-foreground cursor-not-allowed')}>
+            昇華
+          </button>
+        )}
       </div>
 
-      <div className="flex-1" />
-
-      {/* アクション */}
-      <button
-        onClick={onYamlCopy}
-        className="text-[10px] text-muted-foreground hover:text-foreground px-2 py-1 rounded transition-colors"
-        title="YAMLをコピー"
-      >
-        YAML
-      </button>
-
-      {canDemote && (
-        <button
-          onClick={onDemote}
-          className="text-[10px] text-muted-foreground hover:text-foreground px-2 py-1 rounded border border-border transition-colors"
-        >
-          ↓ {STATUS_LABELS[STATUS_ORDER[currentIdx - 1]]}
+      {/* PC: 1行に集約 */}
+      <div className="hidden md:flex items-center gap-2 px-4 h-11">
+        {canDemote && (
+          <button onClick={onDemote}
+            className="text-xs text-muted-foreground hover:text-foreground px-2.5 h-7 rounded border border-border transition-colors shrink-0"
+            title={`${STATUS_LABELS[STATUS_ORDER[currentIdx - 1]]}に降格`}>
+            ↓ {STATUS_LABELS[STATUS_ORDER[currentIdx - 1]]}
+          </button>
+        )}
+        <AiOutcomeControl value={aiOutcome} onChange={onAiOutcomeChange} />
+        <div className="flex-1" />
+        {aiEdits.length > 0 && <AiEditsPopover aiEdits={aiEdits} />}
+        {aiReviewed && (
+          <span className="text-[10px] px-1.5 py-0.5 rounded border border-violet-200 bg-violet-50 text-violet-600 shrink-0">
+            ✦AI済
+          </span>
+        )}
+        <button onClick={onYamlCopy}
+          className="text-[11px] text-muted-foreground hover:text-foreground px-2 h-7 rounded transition-colors shrink-0"
+          title="YAMLをクリップボードにコピー">YAML</button>
+        <button onClick={onSave} disabled={saving || !hasChanges}
+          className={cn('text-sm px-4 h-8 rounded border transition-colors shrink-0',
+            hasChanges && !saving ? 'border-foreground text-foreground hover:bg-muted' : 'border-border text-muted-foreground',
+            'disabled:cursor-not-allowed disabled:opacity-50')}>
+          {saving ? '保存中…' : hasChanges ? '保存' : '保存済み'}
         </button>
-      )}
-
-      <button
-        onClick={onSave}
-        disabled={saving || !hasChanges}
-        className="text-[10px] px-3 py-1 rounded border border-border text-foreground hover:bg-muted transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-      >
-        {saving ? "保存中..." : hasChanges ? "保存" : "保存済み"}
-      </button>
-
-      {canPromote && hasContent && (
-        <button
-          onClick={onPromote}
-          className="text-[10px] px-3 py-1 rounded bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-        >
-          昇華 →
-        </button>
-      )}
+        {canPromote && hasContent && (
+          <button onClick={promoteEnabled ? onPromote : undefined} disabled={!promoteEnabled} title={promoteTitle}
+            className={cn('text-sm px-4 h-8 rounded transition-colors shrink-0',
+              promoteEnabled ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'bg-muted text-muted-foreground cursor-not-allowed')}>
+            昇華 →
+          </button>
+        )}
+      </div>
     </div>
-  );
+  )
 }

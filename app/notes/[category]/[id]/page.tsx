@@ -146,7 +146,7 @@ export default function NoteEditorPage() {
       <footer className="border-t border-gray-100 py-2 px-4 text-xs text-gray-400 flex gap-4">
         <span>作成: {new Date(note.createdAt).toLocaleString('ja-JP')}</span>
         <span>更新: {new Date(note.updatedAt).toLocaleString('ja-JP')}</span>
-        {note.ai_review && <span className="text-purple-400">AI reviewed</span>}
+        {note.ai_outcome !== 'none' && <span className="text-purple-400">AI reviewed</span>}
       </footer>
     </div>
   );

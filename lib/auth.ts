@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true,
   providers: [
     GitHub({
       clientId: process.env.GITHUB_CLIENT_ID!,
@@ -10,6 +11,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
+    // 自分のGitHubアカウントのみサインインを許可
+    signIn({ profile }) {
+      const allowedUser = process.env.GITHUB_OWNER
+      if (!allowedUser) return true // 未設定の場合はスキップ
+      return (profile as { login?: string })?.login === allowedUser
+    },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isOnLogin = nextUrl.pathname.startsWith("/login");

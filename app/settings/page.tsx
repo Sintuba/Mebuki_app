@@ -124,7 +124,7 @@ export default async function SettingsPage() {
         </form>
 
         <p className="text-center text-[11px] text-muted-foreground mt-6">
-          Thought Refinery v0.1.0
+          MEBUKI v0.1.0
         </p>
       </div>
     </div>

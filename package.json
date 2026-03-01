@@ -2,42 +2,20 @@
   "name": "mebuki-app",
   "version": "0.1.0",
   "private": true,
-  "main": "electron/main.js",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -H 0.0.0.0 --webpack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "electron:dev": "concurrently -k -n NEXT,ELECTRON -c cyan,yellow \"next dev\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron:build": "next build && electron-builder",
-    "electron:preview": "next build && electron ."
-  },
-  "build": {
-    "appId": "com.sintuba.mebuki",
-    "productName": "Mebuki",
-    "files": [
-      "electron/**/*",
-      ".next/**/*",
-      "public/**/*",
-      "node_modules/**/*",
-      "package.json",
-      "next.config.ts"
-    ],
-    "mac": {
-      "category": "public.app-category.productivity"
-    },
-    "win": {
-      "target": "nsis"
-    },
-    "linux": {
-      "target": "AppImage"
-    }
+    "lint": "eslint"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.37.0",
+    "@google/generative-ai": "^0.24.1",
     "@octokit/rest": "^22.0.1",
     "@uiw/react-md-editor": "^4.0.11",
     "clsx": "^2.1.1",
     "gray-matter": "^4.0.3",
+    "gsap": "^3.14.2",
     "lucide-react": "^0.575.0",
     "next": "16.1.6",
     "next-auth": "^5.0.0-beta.30",
@@ -51,14 +29,11 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "concurrently": "^9.2.1",
     "dotenv": "^17.3.1",
-    "electron": "^40.6.1",
-    "electron-builder": "^26.8.1",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4",
-    "typescript": "^5",
-    "wait-on": "^9.0.4"
+    "typescript": "^5"
   }
 }

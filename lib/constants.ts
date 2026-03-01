@@ -18,4 +18,5 @@ export const STATUS_LABELS = {
   raw: '未整理',
   refining: '整理中',
   stable: '完成',
+  trashed: '宿根',
 } as const

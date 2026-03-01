@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getNote, updateNote, deleteNote } from '@/lib/github';
+import { getNote, updateNote, deleteNote } from '@/lib/notes';
 import { auth } from '@/lib/auth';
-import type { NoteCategory, NoteStatus } from '@/types/note';
+import { revalidatePath } from 'next/cache';
+import type { NoteCategory, NoteStatus, AiOutcome, AiEditRecord } from '@/types/note';
 
 type Params = { params: Promise<{ category: string; id: string }> };
 
@@ -22,31 +23,37 @@ export async function PATCH(req: NextRequest, { params }: Params) {
   const { category, id } = await params;
   try {
     const body = await req.json();
-    const { title, content, status, ai_review, sha } = body as {
-      title?: string;
-      content?: string;
-      status?: NoteStatus;
-      ai_review?: boolean;
+    const { title, content, status, ai_outcome, ai_reviewed, ai_edits, sha, createdAt } = body as {
+      title: string;
+      content: string;
+      status: NoteStatus;
+      ai_outcome: AiOutcome;
+      ai_reviewed?: boolean;
+      ai_edits?: AiEditRecord[];
       sha: string;
+      createdAt?: string;
     };
 
-    const existing = await getNote(category as NoteCategory, id, token);
-    if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    if (!sha) return NextResponse.json({ error: 'sha is required' }, { status: 400 });
 
     const updated = await updateNote(
       category as NoteCategory,
       id,
       {
-        ...existing,
-        title: title ?? existing.title,
-        status: status ?? existing.status,
-        ai_review: ai_review ?? existing.ai_review,
+        title,
+        status,
+        category: category as NoteCategory,
+        ai_outcome: ai_outcome ?? 'none',
+        ai_reviewed: ai_reviewed ?? false,
+        ...(ai_edits !== undefined && { ai_edits }),
+        createdAt: createdAt ?? new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
-      content ?? existing.content,
-      sha ?? existing.sha!,
+      content,
+      sha,
       token
     );
+    revalidatePath('/', 'layout');
     return NextResponse.json(updated);
   } catch (e) {
     console.error(e);
@@ -62,6 +69,7 @@ export async function DELETE(req: NextRequest, { params }: Params) {
   try {
     const { sha } = await req.json();
     await deleteNote(category as NoteCategory, id, sha, token);
+    revalidatePath('/', 'layout');
     return new NextResponse(null, { status: 204 });
   } catch (e) {
     console.error(e);

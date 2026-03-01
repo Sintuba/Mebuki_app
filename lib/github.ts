@@ -1,5 +1,6 @@
 import { Octokit } from '@octokit/rest';
 import matter from 'gray-matter';
+import { unstable_cache } from 'next/cache';
 import type { Note, NoteFrontmatter, NoteCategory } from '@/types/note';
 
 const OWNER = process.env.GITHUB_OWNER!;
@@ -22,31 +23,35 @@ function serializeNote(frontmatter: NoteFrontmatter, content: string): string {
 export async function listNotes(category?: NoteCategory, token?: string): Promise<Note[]> {
   const octokit = getOctokit(token);
   const categories: NoteCategory[] = category ? [category] : ['learning', 'specs', 'snippets', 'logs', 'rules'];
-  const notes: Note[] = [];
 
-  for (const cat of categories) {
-    try {
-      const { data } = await octokit.repos.getContent({
-        owner: OWNER,
-        repo: REPO,
-        path: `notes/${cat}`,
-        ref: BRANCH,
-      });
-      if (!Array.isArray(data)) continue;
+  // カテゴリを並列フェッチ
+  const perCategory = await Promise.all(
+    categories.map(async (cat) => {
+      try {
+        const { data } = await octokit.repos.getContent({
+          owner: OWNER,
+          repo: REPO,
+          path: `notes/${cat}`,
+          ref: BRANCH,
+        });
+        if (!Array.isArray(data)) return [];
 
-      for (const file of data) {
-        if (!file.name.endsWith('.md')) continue;
-        const note = await getNote(cat, file.name.replace('.md', ''), token);
-        if (note) notes.push(note);
+        // カテゴリ内のノートも並列フェッチ
+        const notes = await Promise.all(
+          data
+            .filter((f) => f.name.endsWith('.md'))
+            .map((f) => getNote(cat, f.name.replace('.md', ''), token))
+        );
+        return notes.filter((n): n is Note => n !== null);
+      } catch {
+        return [];
       }
-    } catch {
-      // ディレクトリが存在しない場合はスキップ
-    }
-  }
-
-  return notes.sort(
-    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    })
   );
+
+  return perCategory
+    .flat()
+    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 }
 
 // ノートを1件取得
@@ -65,6 +70,7 @@ export async function getNote(category: NoteCategory, id: string, token?: string
     const { data: fm, content } = matter(raw);
     return {
       ...(fm as NoteFrontmatter),
+      ai_reviewed: (fm.ai_reviewed as boolean) ?? false, // 既存ノートのデフォルト
       id,
       slug: `${category}/${id}`,
       content: content.trim(),
@@ -122,6 +128,16 @@ export async function updateNote(
 
   const newSha = data.content?.sha ?? sha;
   return { ...frontmatter, id, slug: `${category}/${id}`, content, sha: newSha };
+}
+
+// キャッシュ付きノート一覧取得（サーバーコンポーネント用）
+// - revalidate: 60秒（保存・削除時は revalidateTag('notes') で即時無効化）
+export function cachedListNotes(token: string, category?: NoteCategory) {
+  return unstable_cache(
+    () => listNotes(category, token),
+    [token, category ?? 'all'],
+    { tags: ['notes'], revalidate: 60 }
+  )()
 }
 
 // ノートを削除

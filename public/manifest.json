@@ -1,0 +1,40 @@
+{
+  "name": "MEBUKI - Thought Refinery",
+  "short_name": "MEBUKI",
+  "description": "思考の小さな芽を、構造化されたナレッジに昇華する",
+  "start_url": "/home",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#22C55E",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "notes"],
+  "lang": "ja",
+  "shortcuts": [
+    {
+      "name": "新しいメモ",
+      "short_name": "新規",
+      "url": "/edit/learning/new",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "ホーム",
+      "short_name": "ホーム",
+      "url": "/home",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ]
+}

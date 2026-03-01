@@ -17,8 +17,10 @@ export default function NoteCard({ note }: { note: Note }) {
       <p className="text-sm text-gray-500 line-clamp-2 mb-2">{excerpt || '内容なし'}</p>
       <div className="flex items-center gap-2 text-xs text-gray-400">
         <span className="px-1.5 py-0.5 bg-gray-100 rounded font-mono">{note.category}</span>
-        {note.ai_review && (
-          <span className="px-1.5 py-0.5 bg-purple-50 text-purple-500 rounded">AI reviewed</span>
+        {note.ai_outcome && note.ai_outcome !== 'none' && (
+          <span className={`px-1.5 py-0.5 rounded ${note.ai_outcome === 'promote' ? 'bg-green-50 text-green-600' : 'bg-amber-50 text-amber-600'}`}>
+            {note.ai_outcome === 'promote' ? 'AI↑' : 'AI保'}
+          </span>
         )}
         <span className="ml-auto">
           {new Date(note.updatedAt).toLocaleDateString('ja-JP')}

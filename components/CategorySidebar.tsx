@@ -35,6 +35,27 @@ export default function CategorySidebar() {
       })}
       <div className="my-1 border-t border-border mx-4" />
       <Link
+        href="/list/archive"
+        className={`px-4 py-2 text-xs transition-colors ${
+          pathname === "/list/archive"
+            ? "bg-muted text-foreground font-medium"
+            : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+        }`}
+      >
+        アーカイブ
+      </Link>
+      <Link
+        href="/list/trash"
+        className={`px-4 py-2 text-xs transition-colors ${
+          pathname === "/list/trash"
+            ? "bg-muted text-foreground font-medium"
+            : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+        }`}
+      >
+        宿根
+      </Link>
+      <div className="my-1 border-t border-border mx-4" />
+      <Link
         href="/list/import"
         className={`px-4 py-2 text-xs transition-colors ${
           pathname === "/list/import"

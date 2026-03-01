@@ -1,5 +1,5 @@
 import { auth } from '@/lib/auth'
-import { listNotes } from '@/lib/github'
+import { cachedListNotes } from '@/lib/notes'
 import { notFound } from 'next/navigation'
 import { NoteList } from '@/components/note-list'
 import type { NoteCategory } from '@/types/note'
@@ -14,7 +14,8 @@ export default async function CategoryListPage({ params }: Params) {
   if (!VALID_CATEGORIES.includes(category)) notFound()
 
   const session = await auth()
-  const notes = await listNotes(category as NoteCategory, session?.accessToken)
+  const token = session?.accessToken ?? ''
+  const notes = await cachedListNotes(token, category as NoteCategory)
 
   return <NoteList initialNotes={notes} category={category} />
 }

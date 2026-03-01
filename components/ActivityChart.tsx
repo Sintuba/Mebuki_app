@@ -48,7 +48,7 @@ export default function ActivityChart({ data }: { data: ActivityData }) {
                 onClick={() => setView(v.key)}
                 className={`text-[10px] px-2 py-0.5 rounded transition-colors ${
                   view === v.key
-                    ? "bg-foreground text-background"
+                    ? "bg-green-500 text-white"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >

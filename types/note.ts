@@ -1,11 +1,19 @@
-export type NoteStatus = 'raw' | 'refining' | 'stable';
+export type NoteStatus = 'raw' | 'refining' | 'stable' | 'trashed';
 export type NoteCategory = 'learning' | 'specs' | 'snippets' | 'logs' | 'rules';
+export type AiOutcome = 'none' | 'promote' | 'keep';
+
+export interface AiEditRecord {
+  at: string;       // ISO timestamp
+  summary: string;  // AIによる変更概要
+}
 
 export interface NoteFrontmatter {
   title: string;
   status: NoteStatus;
   category: NoteCategory;
-  ai_review: boolean;
+  ai_outcome: AiOutcome;
+  ai_reviewed: boolean;  // AI評価を一度でも受けたか（昇華ゲート）
+  ai_edits?: AiEditRecord[];  // AIマージ変更履歴
   createdAt: string;
   updatedAt: string;
 }

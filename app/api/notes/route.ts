@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { listNotes, createNote } from '@/lib/github';
+import { listNotes, createNote } from '@/lib/notes';
 import { auth } from '@/lib/auth';
+import { revalidatePath } from 'next/cache';
 import type { NoteCategory, NoteStatus } from '@/types/note';
 
 // GET /api/notes?category=learning
@@ -43,12 +44,14 @@ export async function POST(req: NextRequest) {
       title,
       status: 'raw' as NoteStatus,
       category,
-      ai_review: false,
+      ai_outcome: 'keep' as const,
+      ai_reviewed: false,
       createdAt: now,
       updatedAt: now,
     };
 
     const note = await createNote(category, id, frontmatter, content, token);
+    revalidatePath('/', 'layout');
     return NextResponse.json(note, { status: 201 });
   } catch (e) {
     console.error(e);

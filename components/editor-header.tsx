@@ -1,36 +1,24 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import type { NoteStatus } from "@/types/note";
-
-const CATEGORY_LABELS: Record<string, string> = {
-  learning: "学習メモ",
-  specs: "仕様書",
-  snippets: "コード断片",
-  logs: "作業ログ",
-  rules: "ルール集",
-};
+import { ChevronLeft } from 'lucide-react'
+import type { NoteStatus, AiOutcome } from '@/types/note'
+import { CATEGORY_LABELS, STATUS_LABELS } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 
 const STATUS_STYLES: Record<NoteStatus, string> = {
-  raw: "text-status-raw bg-muted",
-  refining: "text-status-refining bg-orange-50",
-  stable: "text-status-stable bg-green-50",
-};
-
-const STATUS_LABELS: Record<NoteStatus, string> = {
-  raw: "未整理",
-  refining: "整理中",
-  stable: "完成",
-};
+  raw:      'text-orange-600 bg-orange-50 border-orange-200',
+  refining: 'text-blue-600  bg-blue-50  border-blue-200',
+  stable:   'text-green-600 bg-green-50 border-green-200',
+  trashed:  'text-gray-500  bg-gray-50  border-gray-200',
+}
 
 interface EditorHeaderProps {
-  title: string;
-  onTitleChange: (title: string) => void;
-  category: string;
-  status: NoteStatus;
-  aiReview: boolean;
-  promoteCandidate: boolean;
-  keep: boolean;
+  title: string
+  onTitleChange: (title: string) => void
+  category: string
+  status: NoteStatus
+  aiOutcome: AiOutcome
+  onBack: () => void
 }
 
 export function EditorHeader({
@@ -38,59 +26,52 @@ export function EditorHeader({
   onTitleChange,
   category,
   status,
-  aiReview,
-  promoteCandidate,
-  keep,
+  aiOutcome,
+  onBack,
 }: EditorHeaderProps) {
+  const categoryLabel = CATEGORY_LABELS[category as keyof typeof CATEGORY_LABELS] ?? category
+
   return (
     <div className="shrink-0 border-b border-border bg-background">
-      {/* ナビゲーション行 */}
-      <div className="flex items-center gap-2 px-4 py-2 border-b border-border/50">
-        <Link
-          href={`/list/${category}`}
-          className="text-xs text-muted-foreground hover:text-foreground transition-colors shrink-0"
+      {/* Row 1: ナビゲーション（薄め） */}
+      <div className="flex items-center gap-1.5 px-1 md:px-3 h-9 border-b border-border/40">
+        <button
+          onClick={onBack}
+          className="flex items-center gap-0.5 px-2 h-9 text-muted-foreground hover:text-foreground transition-colors"
+          aria-label={`${categoryLabel}一覧に戻る`}
         >
-          ← {CATEGORY_LABELS[category] ?? category}
-        </Link>
-        <span className="text-border text-xs">/</span>
-        <span
-          className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${
-            STATUS_STYLES[status] ?? "text-muted-foreground bg-muted"
-          }`}
-        >
-          {STATUS_LABELS[status] ?? status}
+          <ChevronLeft className="w-3.5 h-3.5 shrink-0" />
+          <span className="hidden md:inline text-[11px]">{categoryLabel}</span>
+        </button>
+
+        <span className={cn('text-[10px] px-1.5 py-0.5 rounded border font-medium shrink-0', STATUS_STYLES[status])}>
+          {STATUS_LABELS[status]}
         </span>
 
         <div className="flex-1" />
 
-        {/* フラグバッジ */}
-        {aiReview && (
-          <span className="text-[10px] px-1.5 py-0.5 rounded bg-badge-ai-bg text-badge-ai-fg font-medium">
-            AI
+        {aiOutcome === 'promote' && (
+          <span className="text-[10px] px-1.5 py-0.5 rounded border border-green-200 bg-green-50 text-green-700 font-medium shrink-0">
+            AI↑
           </span>
         )}
-        {promoteCandidate && (
-          <span className="text-[10px] px-1.5 py-0.5 rounded bg-badge-promote-bg text-badge-promote-fg font-medium">
-            候補
-          </span>
-        )}
-        {keep && (
-          <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-medium">
-            保持
+        {aiOutcome === 'keep' && (
+          <span className="text-[10px] px-1.5 py-0.5 rounded border border-amber-200 bg-amber-50 text-amber-700 font-medium shrink-0">
+            AI保
           </span>
         )}
       </div>
 
-      {/* タイトル入力行 */}
-      <div className="px-4 py-2.5">
+      {/* Row 2: タイトル入力 */}
+      <div className="px-4 md:px-5 py-2">
         <input
           type="text"
           value={title}
           onChange={(e) => onTitleChange(e.target.value)}
           placeholder="タイトルを入力..."
-          className="w-full text-sm font-medium bg-transparent text-foreground placeholder:text-muted-foreground/50 outline-none"
+          className="w-full text-base md:text-sm font-medium bg-transparent text-foreground placeholder:text-muted-foreground/50 outline-none"
         />
       </div>
     </div>
-  );
+  )
 }
