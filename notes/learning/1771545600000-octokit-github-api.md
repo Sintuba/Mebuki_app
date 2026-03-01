@@ -1,11 +1,11 @@
 ---
 title: Octokit で GitHub API 操作
-status: raw
+status: refining
 category: learning
 ai_outcome: none
 ai_reviewed: true
 createdAt: '2026-02-20T00:00:00.000Z'
-updatedAt: '2026-03-01T02:38:41.277Z'
+updatedAt: '2026-03-01T02:44:15.639Z'
 ---
 ## Octokit とは
 
