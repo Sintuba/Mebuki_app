@@ -1,11 +1,11 @@
 ---
 title: Next.js App Router 完全理解
-status: refining
+status: trashed
 category: learning
 ai_outcome: keep
 ai_reviewed: true
 createdAt: '2026-01-23T00:00:00.000Z'
-updatedAt: '2026-03-01T06:45:50.072Z'
+updatedAt: '2026-03-01T06:46:12.119Z'
 ---
 ## App Router とは
 
