@@ -13,6 +13,10 @@ const config: Record<NoteStatus, { label: string; className: string }> = {
     label: 'stable',
     className: 'bg-green-100 text-green-700 border border-green-200',
   },
+  trashed: {
+    label: 'trashed',
+    className: 'bg-gray-100 text-gray-500 border border-gray-200',
+  },
 };
 
 export default function StatusBadge({ status }: { status: NoteStatus }) {
