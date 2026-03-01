@@ -2,12 +2,11 @@
 title: Octokit で GitHub API 操作
 status: raw
 category: learning
-ai_outcome: keep
-ai_reviewed: false
+ai_outcome: none
+ai_reviewed: true
 createdAt: '2026-02-20T00:00:00.000Z'
-updatedAt: '2026-02-20T00:00:00.000Z'
+updatedAt: '2026-03-01T02:38:41.277Z'
 ---
-
 ## Octokit とは
 
 GitHub 公式の JavaScript クライアントライブラリ。REST API と GraphQL API の両方をサポート。
