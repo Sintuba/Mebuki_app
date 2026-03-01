@@ -2,12 +2,11 @@
 title: TypeScript ユーティリティ型まとめ
 status: stable
 category: learning
-ai_outcome: keep
+ai_outcome: promote
 ai_reviewed: true
 createdAt: '2026-01-26T12:00:00.000Z'
-updatedAt: '2026-02-12T12:00:00.000Z'
+updatedAt: '2026-03-01T00:42:25.115Z'
 ---
-
 ## よく使うユーティリティ型
 
 ### `Partial<T>`
