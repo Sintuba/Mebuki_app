@@ -1,14 +1,11 @@
 ---
 title: Octokit で GitHub API 操作
-status: refining
+status: trashed
 category: learning
 ai_outcome: none
 ai_reviewed: true
-ai_edits:
-  - at: '2026-03-01T03:22:54.940Z'
-    summary: 認証方法の具体例と複数のAPI操作コードを追加し、発展的な内容に補足しました。
 createdAt: '2026-02-20T00:00:00.000Z'
-updatedAt: '2026-03-01T03:22:55.710Z'
+updatedAt: '2026-03-01T06:52:47.943Z'
 ---
 # Octokit で GitHub API 操作
 
