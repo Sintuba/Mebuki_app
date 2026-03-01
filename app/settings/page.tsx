@@ -2,6 +2,7 @@ import { auth, signOut } from '@/lib/auth'
 import { Github, LogOut, User, Bell, Shield, HardDrive } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { PwaInstallButton } from '@/components/PwaInstallButton'
 
 export default async function SettingsPage() {
   const session = await auth()
@@ -106,7 +107,9 @@ export default async function SettingsPage() {
           </CardContent>
         </Card>
 
-        <Separator className="mb-4" />
+        <PwaInstallButton />
+
+        <Separator className="my-4" />
 
         <form
           action={async () => {

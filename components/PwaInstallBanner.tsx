@@ -3,33 +3,41 @@
 import { useEffect, useState } from 'react'
 import { Download, X } from 'lucide-react'
 
-interface BeforeInstallPromptEvent extends Event {
-  prompt(): Promise<void>
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
+function getGlobalPrompt() {
+  return (window as unknown as Record<string, unknown>).__pwaPrompt as
+    | { prompt(): Promise<void>; userChoice: Promise<{ outcome: string }> }
+    | undefined
 }
 
 export function PwaInstallBanner() {
-  const [promptEvent, setPromptEvent] = useState<BeforeInstallPromptEvent | null>(null)
+  const [available, setAvailable] = useState(false)
   const [dismissed, setDismissed] = useState(false)
 
   useEffect(() => {
-    // すでにインストール済みならバナーを出さない
     if (window.matchMedia('(display-mode: standalone)').matches) return
 
-    const handler = (e: Event) => {
-      e.preventDefault()
-      setPromptEvent(e as BeforeInstallPromptEvent)
+    // すでにキャプチャ済みの場合
+    if (getGlobalPrompt()) {
+      setAvailable(true)
+      return
     }
-    window.addEventListener('beforeinstallprompt', handler)
-    return () => window.removeEventListener('beforeinstallprompt', handler)
+    // これから発火する場合
+    const handler = () => setAvailable(true)
+    window.addEventListener('pwa-installable', handler)
+    return () => window.removeEventListener('pwa-installable', handler)
   }, [])
 
-  if (!promptEvent || dismissed) return null
+  if (!available || dismissed) return null
 
   const handleInstall = async () => {
-    await promptEvent.prompt()
-    const { outcome } = await promptEvent.userChoice
-    if (outcome === 'accepted') setPromptEvent(null)
+    const prompt = getGlobalPrompt()
+    if (!prompt) return
+    await prompt.prompt()
+    const { outcome } = await prompt.userChoice
+    if (outcome === 'accepted') {
+      setAvailable(false)
+      ;(window as unknown as Record<string, unknown>).__pwaPrompt = undefined
+    }
   }
 
   return (
