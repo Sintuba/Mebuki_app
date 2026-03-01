@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getNote, updateNote, deleteNote } from '@/lib/notes';
 import { auth } from '@/lib/auth';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import type { NoteCategory, NoteStatus, AiOutcome, AiEditRecord } from '@/types/note';
 
 type Params = { params: Promise<{ category: string; id: string }> };
@@ -54,6 +54,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
       token
     );
     revalidatePath('/', 'layout');
+    revalidateTag('notes');
     return NextResponse.json(updated);
   } catch (e) {
     console.error(e);
@@ -70,6 +71,7 @@ export async function DELETE(req: NextRequest, { params }: Params) {
     const { sha } = await req.json();
     await deleteNote(category as NoteCategory, id, sha, token);
     revalidatePath('/', 'layout');
+    revalidateTag('notes');
     return new NextResponse(null, { status: 204 });
   } catch (e) {
     console.error(e);
