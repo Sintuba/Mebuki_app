@@ -1,13 +1,12 @@
 ---
 title: Next.js revalidateTag パターン
-status: raw
+status: trashed
 category: snippets
 ai_outcome: keep
 ai_reviewed: false
 createdAt: '2026-02-24T00:00:00.000Z'
-updatedAt: '2026-02-24T00:00:00.000Z'
+updatedAt: '2026-03-01T06:51:24.919Z'
 ---
-
 ## unstable_cache + revalidateTag
 
 ```ts
