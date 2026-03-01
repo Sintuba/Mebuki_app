@@ -39,7 +39,7 @@ function AiOutcomeControl({ value, onChange, compact = false }: {
     <div className="flex items-center border border-border rounded-full overflow-hidden shrink-0 text-[11px]">
       {segments.map((seg, i) => (
         <button key={seg.key} onClick={() => onChange(seg.key)} title={seg.label}
-          className={cn('transition-colors font-medium', compact ? 'px-2 h-7' : 'px-2.5 h-7',
+          className={cn('transition-colors font-medium', compact ? 'px-3 h-11 text-xs' : 'px-2.5 h-7',
             i > 0 && 'border-l border-border',
             value === seg.key ? seg.activeClass : 'text-muted-foreground hover:text-foreground hover:bg-muted/50')}>
           {compact ? seg.shortLabel : seg.label}
@@ -93,12 +93,12 @@ export function EditorToolbar({
   return (
     <div className="shrink-0 border-t border-border bg-background">
       {/* SP: 1行 */}
-      <div className="flex md:hidden items-center gap-1.5 px-3 h-12">
+      <div className="flex md:hidden items-center gap-2 px-3 h-20">
         <AiOutcomeControl value={aiOutcome} onChange={onAiOutcomeChange} compact />
         <div className="flex-1" />
         {canDemote && (
           <button onClick={onDemote}
-            className="text-xs text-muted-foreground hover:text-foreground px-2 h-8 rounded border border-border transition-colors shrink-0">↓</button>
+            className="text-sm text-muted-foreground hover:text-foreground px-3 h-11 rounded border border-border transition-colors shrink-0">↓</button>
         )}
         {onAiChoices && hasContent && (
           <button
@@ -106,13 +106,13 @@ export function EditorToolbar({
             disabled={aiChoicesLoading}
             title="AIに変換方向を提案してもらう"
             className={cn(
-              'h-8 w-8 rounded border transition-colors shrink-0 flex items-center justify-center',
+              'h-11 w-11 rounded border transition-colors shrink-0 flex items-center justify-center',
               aiChoicesLoading
                 ? 'border-violet-300 text-violet-400'
                 : 'border-violet-300 text-violet-500 hover:bg-violet-50'
             )}
           >
-            <Sparkles className={cn('size-3.5', aiChoicesLoading && 'animate-pulse')} />
+            <Sparkles className={cn('size-5', aiChoicesLoading && 'animate-pulse')} />
           </button>
         )}
         {onSprout && hasContent && (
@@ -121,24 +121,24 @@ export function EditorToolbar({
             disabled={sproutLoading}
             title="芽吹き候補を探す"
             className={cn(
-              'h-8 w-8 rounded border transition-colors shrink-0 flex items-center justify-center',
+              'h-11 w-11 rounded border transition-colors shrink-0 flex items-center justify-center',
               sproutLoading
                 ? 'border-green-300 text-green-400'
                 : 'border-green-300 text-green-600 hover:bg-green-50'
             )}
           >
-            <Sprout className={cn('size-3.5', sproutLoading && 'animate-pulse')} />
+            <Sprout className={cn('size-5', sproutLoading && 'animate-pulse')} />
           </button>
         )}
         <button onClick={onSave} disabled={saving || !hasChanges}
-          className={cn('text-xs px-3 h-8 rounded border transition-colors shrink-0',
+          className={cn('text-sm px-4 h-11 rounded border transition-colors shrink-0',
             hasChanges && !saving ? 'border-foreground text-foreground' : 'border-border text-muted-foreground',
             'disabled:cursor-not-allowed disabled:opacity-50')}>
           {saving ? '…' : hasChanges ? '保存' : '済み'}
         </button>
         {canPromote && hasContent && (
           <button onClick={promoteEnabled ? onPromote : undefined} disabled={!promoteEnabled} title={promoteTitle}
-            className={cn('text-xs px-3 h-8 rounded transition-colors shrink-0',
+            className={cn('text-sm px-4 h-11 rounded transition-colors shrink-0',
               promoteEnabled ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'bg-muted text-muted-foreground cursor-not-allowed')}>
             昇華
           </button>
