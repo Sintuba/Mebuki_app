@@ -34,42 +34,42 @@ export function EditorHeader({
   return (
     <div className="shrink-0 border-b border-border bg-background">
       {/* Row 1: ナビゲーション（薄め） */}
-      <div className="flex items-center gap-1.5 px-1 md:px-3 h-9 border-b border-border/40">
+      <div className="flex items-center gap-2 px-1 md:px-3 h-14 border-b border-border/40">
         <button
           onClick={onBack}
-          className="flex items-center gap-0.5 px-2 h-9 text-muted-foreground hover:text-foreground transition-colors"
+          className="flex items-center gap-1 px-3 h-14 text-muted-foreground hover:text-foreground transition-colors"
           aria-label={`${categoryLabel}一覧に戻る`}
         >
-          <ChevronLeft className="w-3.5 h-3.5 shrink-0" />
-          <span className="hidden md:inline text-[11px]">{categoryLabel}</span>
+          <ChevronLeft className="w-5 h-5 shrink-0" />
+          <span className="hidden md:inline text-xs">{categoryLabel}</span>
         </button>
 
-        <span className={cn('text-[10px] px-1.5 py-0.5 rounded border font-medium shrink-0', STATUS_STYLES[status])}>
+        <span className={cn('text-xs px-2 py-1 rounded border font-medium shrink-0', STATUS_STYLES[status])}>
           {STATUS_LABELS[status]}
         </span>
 
         <div className="flex-1" />
 
         {aiOutcome === 'promote' && (
-          <span className="text-[10px] px-1.5 py-0.5 rounded border border-green-200 bg-green-50 text-green-700 font-medium shrink-0">
+          <span className="text-xs px-2 py-1 rounded border border-green-200 bg-green-50 text-green-700 font-medium shrink-0">
             AI↑
           </span>
         )}
         {aiOutcome === 'keep' && (
-          <span className="text-[10px] px-1.5 py-0.5 rounded border border-amber-200 bg-amber-50 text-amber-700 font-medium shrink-0">
+          <span className="text-xs px-2 py-1 rounded border border-amber-200 bg-amber-50 text-amber-700 font-medium shrink-0">
             AI保
           </span>
         )}
       </div>
 
       {/* Row 2: タイトル入力 */}
-      <div className="px-4 md:px-5 py-2">
+      <div className="px-4 md:px-5 py-3.5">
         <input
           type="text"
           value={title}
           onChange={(e) => onTitleChange(e.target.value)}
           placeholder="タイトルを入力..."
-          className="w-full text-base md:text-sm font-medium bg-transparent text-foreground placeholder:text-muted-foreground/50 outline-none"
+          className="w-full text-lg md:text-base font-medium bg-transparent text-foreground placeholder:text-muted-foreground/50 outline-none"
         />
       </div>
     </div>
