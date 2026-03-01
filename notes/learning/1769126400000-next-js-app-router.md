@@ -1,13 +1,12 @@
 ---
 title: Next.js App Router 完全理解
-status: stable
+status: refining
 category: learning
 ai_outcome: keep
 ai_reviewed: true
 createdAt: '2026-01-23T00:00:00.000Z'
-updatedAt: '2026-02-10T00:00:00.000Z'
+updatedAt: '2026-03-01T06:45:50.072Z'
 ---
-
 ## App Router とは
 
 Next.js 13 以降の新しいルーティングシステム。`app/` ディレクトリを使用する。
