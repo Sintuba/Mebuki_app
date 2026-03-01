@@ -6,6 +6,8 @@ import { EditorHeader } from '@/components/editor-header'
 import { EditorToolbar } from '@/components/editor-toolbar'
 import { PromoteModal } from '@/components/promote-modal'
 import { MdEditor } from '@/components/md-editor'
+import { AiChoicePanel } from '@/components/ai-choice-panel'
+import type { AiChoice } from '@/components/ai-choice-panel'
 import type { NoteStatus, AiOutcome, AiEditRecord } from '@/types/note'
 
 const STATUS_ORDER: NoteStatus[] = ['raw', 'refining', 'stable']
@@ -43,6 +45,12 @@ export default function EditorPage({
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [showLeaveModal, setShowLeaveModal] = useState(false)
+
+  // AI choices
+  const [aiChoicesOpen, setAiChoicesOpen] = useState(false)
+  const [aiChoicesLoading, setAiChoicesLoading] = useState(false)
+  const [aiChoices, setAiChoices] = useState<AiChoice[]>([])
+  const [aiChoicesError, setAiChoicesError] = useState('')
 
   // GitHub の sha（更新時に必要）
   const shaRef = useRef<string | undefined>(undefined)
@@ -206,6 +214,27 @@ export default function EditorPage({
     setStatus(demoteStatus(status))
   }
 
+  const handleAiChoices = async () => {
+    setAiChoicesOpen(true)
+    setAiChoicesLoading(true)
+    setAiChoices([])
+    setAiChoicesError('')
+    try {
+      const res = await fetch('/api/ai/choices', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content, category }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'AI提案に失敗しました')
+      setAiChoices(data.choices ?? [])
+    } catch (e) {
+      setAiChoicesError(e instanceof Error ? e.message : 'AI提案に失敗しました')
+    } finally {
+      setAiChoicesLoading(false)
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex flex-col flex-1 min-h-0 items-center justify-center">
@@ -257,6 +286,7 @@ export default function EditorPage({
         hasContent={content.trim().length > 0}
         status={status}
         saving={saving}
+        aiChoicesLoading={aiChoicesLoading}
         onSave={() => handleSave()}
         onPromote={() => setPromoteOpen(true)}
         onDemote={handleDemote}
@@ -265,6 +295,7 @@ export default function EditorPage({
             `title: "${title}"\ncategory: ${category}\nstatus: ${status}\nai_outcome: ${aiOutcome}\nai_reviewed: ${aiReviewed}`
           )
         }}
+        onAiChoices={!isNew ? handleAiChoices : undefined}
       />
 
       <PromoteModal
@@ -272,6 +303,15 @@ export default function EditorPage({
         onOpenChange={setPromoteOpen}
         onConfirm={handlePromoteConfirm}
         content={content}
+      />
+
+      <AiChoicePanel
+        open={aiChoicesOpen}
+        loading={aiChoicesLoading}
+        choices={aiChoices}
+        error={aiChoicesError}
+        onClose={() => setAiChoicesOpen(false)}
+        onApply={(newContent) => setContent(newContent)}
       />
 
       {/* 未保存確認オーバーレイ */}

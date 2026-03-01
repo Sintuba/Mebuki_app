@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Sparkles } from 'lucide-react'
 import type { NoteStatus, AiOutcome, AiEditRecord } from '@/types/note'
 import { STATUS_LABELS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
@@ -16,10 +17,12 @@ interface EditorToolbarProps {
   hasContent: boolean
   status: NoteStatus
   saving?: boolean
+  aiChoicesLoading?: boolean
   onSave: () => void
   onPromote: () => void
   onDemote: () => void
   onYamlCopy: () => void
+  onAiChoices?: () => void
 }
 
 function AiOutcomeControl({ value, onChange, compact = false }: {
@@ -75,7 +78,8 @@ function AiEditsPopover({ aiEdits }: { aiEdits: AiEditRecord[] }) {
 export function EditorToolbar({
   aiOutcome, onAiOutcomeChange, aiReviewed, aiEdits = [],
   hasChanges, hasContent, status, saving = false,
-  onSave, onPromote, onDemote, onYamlCopy,
+  aiChoicesLoading = false,
+  onSave, onPromote, onDemote, onYamlCopy, onAiChoices,
 }: EditorToolbarProps) {
   const currentIdx = STATUS_ORDER.indexOf(status)
   const canPromote = currentIdx < STATUS_ORDER.length - 1
@@ -92,6 +96,21 @@ export function EditorToolbar({
         {canDemote && (
           <button onClick={onDemote}
             className="text-xs text-muted-foreground hover:text-foreground px-2 h-8 rounded border border-border transition-colors shrink-0">↓</button>
+        )}
+        {onAiChoices && hasContent && (
+          <button
+            onClick={onAiChoices}
+            disabled={aiChoicesLoading}
+            title="AIに変換方向を提案してもらう"
+            className={cn(
+              'h-8 w-8 rounded border transition-colors shrink-0 flex items-center justify-center',
+              aiChoicesLoading
+                ? 'border-violet-300 text-violet-400'
+                : 'border-violet-300 text-violet-500 hover:bg-violet-50'
+            )}
+          >
+            <Sparkles className={cn('size-3.5', aiChoicesLoading && 'animate-pulse')} />
+          </button>
         )}
         <button onClick={onSave} disabled={saving || !hasChanges}
           className={cn('text-xs px-3 h-8 rounded border transition-colors shrink-0',
@@ -128,6 +147,22 @@ export function EditorToolbar({
         <button onClick={onYamlCopy}
           className="text-[11px] text-muted-foreground hover:text-foreground px-2 h-7 rounded transition-colors shrink-0"
           title="YAMLをクリップボードにコピー">YAML</button>
+        {onAiChoices && hasContent && (
+          <button
+            onClick={onAiChoices}
+            disabled={aiChoicesLoading}
+            title="AIに変換方向を提案してもらう"
+            className={cn(
+              'flex items-center gap-1.5 text-[11px] px-2.5 h-7 rounded border transition-colors shrink-0',
+              aiChoicesLoading
+                ? 'border-violet-200 text-violet-400'
+                : 'border-violet-300 text-violet-500 hover:bg-violet-50'
+            )}
+          >
+            <Sparkles className={cn('size-3', aiChoicesLoading && 'animate-pulse')} />
+            {aiChoicesLoading ? '考え中...' : 'AI提案'}
+          </button>
+        )}
         <button onClick={onSave} disabled={saving || !hasChanges}
           className={cn('text-sm px-4 h-8 rounded border transition-colors shrink-0',
             hasChanges && !saving ? 'border-foreground text-foreground hover:bg-muted' : 'border-border text-muted-foreground',
