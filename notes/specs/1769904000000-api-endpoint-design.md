@@ -1,13 +1,12 @@
 ---
 title: API エンドポイント設計書
-status: refining
+status: trashed
 category: specs
 ai_outcome: keep
 ai_reviewed: false
 createdAt: '2026-02-01T00:00:00.000Z'
-updatedAt: '2026-02-10T00:00:00.000Z'
+updatedAt: '2026-03-01T06:46:01.717Z'
 ---
-
 ## エンドポイント一覧
 
 ### `GET /api/notes/[category]/[id]`
