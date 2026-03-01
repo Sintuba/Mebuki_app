@@ -51,14 +51,14 @@ export function AiReviewTab({ variant = 'mobile' }: AiReviewTabProps) {
       className="flex-1 flex flex-col items-center justify-center"
     >
       <div className={cn(
-        'relative flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 -mt-4 shadow-md',
+        'relative flex items-center justify-center w-14 h-14 rounded-full transition-all duration-300 -mt-5 shadow-md',
         isHome
           ? 'bg-muted text-muted-foreground/30 shadow-none'
           : count > 0
             ? 'bg-linear-to-r from-violet-500 to-indigo-500 text-white shadow-lg shadow-indigo-300/50'
             : 'bg-muted/60 text-muted-foreground border border-border shadow-none'
       )}>
-        <Sparkles className={cn('size-5', !isHome && count > 0 && 'animate-pulse')} />
+        <Sparkles className={cn('size-6', !isHome && count > 0 && 'animate-pulse')} />
         {!isHome && count > 0 && (
           <span className="absolute -top-0.5 -right-0.5 text-[9px] font-bold bg-white text-violet-600 rounded-full w-4.5 h-4.5 flex items-center justify-center leading-none border border-violet-200 shadow-sm">
             {count}
@@ -66,7 +66,7 @@ export function AiReviewTab({ variant = 'mobile' }: AiReviewTabProps) {
         )}
       </div>
       <span className={cn(
-        'text-[10px] mt-1 transition-colors',
+        'text-[11px] mt-1 transition-colors',
         isHome
           ? 'text-muted-foreground/30'
           : count > 0
