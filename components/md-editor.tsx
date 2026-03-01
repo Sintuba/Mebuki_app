@@ -273,14 +273,14 @@ export function MdEditor({ value, onChange, disabled }: MdEditorProps) {
   // ── SP header (tab + mini toolbar) ─────────────────────────────────────────
   const spHeader = (
     <div className="flex md:hidden flex-col shrink-0 bg-background border-b border-border">
-      {/* タブ (h-12) */}
-      <div className="flex h-12">
+      {/* タブ (h-14) */}
+      <div className="flex h-14">
         {(['edit', 'preview'] as SpMode[]).map((mode) => (
           <button
             key={mode}
             onClick={() => setSpMode(mode)}
             className={cn(
-              'flex-1 text-sm font-medium transition-colors',
+              'flex-1 text-base font-medium transition-colors',
               spMode === mode
                 ? 'text-foreground border-b-2 border-primary'
                 : 'text-muted-foreground',
@@ -294,7 +294,7 @@ export function MdEditor({ value, onChange, disabled }: MdEditorProps) {
       {/* ミニツールバー（編集モードのみ） */}
       {spMode === 'edit' && (
         <div
-          className="flex overflow-x-auto py-1.5 px-2 gap-2 h-12"
+          className="flex overflow-x-auto py-1.5 px-2 gap-2 h-14"
           style={{ scrollbarWidth: 'none' }}
         >
           {SP_TOOLS.map((tool, i) => (
@@ -302,7 +302,7 @@ export function MdEditor({ value, onChange, disabled }: MdEditorProps) {
               key={i}
               onClick={() => !disabled && insert(tool.action)}
               disabled={disabled}
-              className="shrink-0 h-9 px-3 text-xs font-mono font-medium rounded border border-border text-muted-foreground hover:text-foreground hover:bg-muted active:bg-muted disabled:opacity-40 transition-colors"
+              className="shrink-0 h-11 px-4 text-sm font-mono font-medium rounded border border-border text-muted-foreground hover:text-foreground hover:bg-muted active:bg-muted disabled:opacity-40 transition-colors"
             >
               {tool.label}
             </button>
