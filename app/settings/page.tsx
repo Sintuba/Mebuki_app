@@ -3,6 +3,7 @@ import { Github, LogOut, User, Bell, Shield, HardDrive } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { PwaInstallButton } from '@/components/PwaInstallButton'
+import { PwaDebug } from '@/components/PwaDebug'
 
 export default async function SettingsPage() {
   const session = await auth()
@@ -106,6 +107,8 @@ export default async function SettingsPage() {
             </p>
           </CardContent>
         </Card>
+
+        <PwaDebug />
 
         <PwaInstallButton />
 
