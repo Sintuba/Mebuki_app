@@ -8,16 +8,20 @@ export function PwaDebug() {
     swState: '確認中...',
     promptReady: false,
     isStandalone: false,
+    earlyCapture: false,
   })
 
   useEffect(() => {
     const manifestEl = document.querySelector<HTMLLinkElement>('link[rel="manifest"]')
+    const w = window as unknown as Record<string, unknown>
+    const earlyCapture = !!w.__pwaPrompt
 
     setInfo({
       manifestLink: manifestEl?.href ?? 'なし ❌',
       swState: 'serviceWorker' in navigator ? '対応' : '非対応 ❌',
-      promptReady: !!(window as unknown as Record<string, unknown>).__pwaPrompt,
+      promptReady: earlyCapture,
       isStandalone: window.matchMedia('(display-mode: standalone)').matches,
+      earlyCapture,
     })
 
     if ('serviceWorker' in navigator) {
@@ -38,6 +42,7 @@ export function PwaDebug() {
       <p className="text-xs font-semibold text-foreground mb-2">PWA 診断</p>
       <p><span className="text-muted-foreground">manifest: </span>{info.manifestLink}</p>
       <p><span className="text-muted-foreground">SW: </span>{info.swState}</p>
+      <p><span className="text-muted-foreground">earlyCapture: </span>{info.earlyCapture ? '✓ スクリプトで取得済み' : 'なし'}</p>
       <p><span className="text-muted-foreground">installPrompt: </span>{info.promptReady ? '取得済み ✓' : '未取得'}</p>
       <p><span className="text-muted-foreground">standalone: </span>{info.isStandalone ? 'はい ✓' : 'いいえ（ブラウザ）'}</p>
     </div>

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Geist_Mono } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister'
 import { PwaInstallBanner } from '@/components/PwaInstallBanner'
@@ -41,6 +42,14 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${geistMono.variable} font-mono antialiased`}>
+        {/* React より先に beforeinstallprompt を捕捉 */}
+        <Script id="pwa-capture" strategy="beforeInteractive">{`
+          window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault();
+            window.__pwaPrompt = e;
+            window.dispatchEvent(new CustomEvent('pwa-installable'));
+          });
+        `}</Script>
         <ServiceWorkerRegister />
         <PwaInstallBanner />
         <Providers>{children}</Providers>
