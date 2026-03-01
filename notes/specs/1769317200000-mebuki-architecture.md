@@ -1,11 +1,11 @@
 ---
 title: Mebuki システムアーキテクチャ
-status: refining
+status: trashed
 category: specs
 ai_outcome: keep
 ai_reviewed: true
 createdAt: '2026-01-25T05:00:00.000Z'
-updatedAt: '2026-03-01T06:45:50.593Z'
+updatedAt: '2026-03-01T06:46:02.194Z'
 ---
 ## 概要
 
