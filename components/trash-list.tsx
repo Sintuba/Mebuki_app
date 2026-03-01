@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Trash2 } from 'lucide-react'
 import type { Note } from '@/types/note'
 import { CATEGORY_LABELS } from '@/lib/constants'
@@ -14,6 +15,7 @@ interface TrashListProps {
 
 export function TrashList({ initialNotes }: TrashListProps) {
   const ctx = useAiSelection()
+  const router = useRouter()
   const [notes, setNotes] = useState(initialNotes)
   const [sort, setSort] = useState<SortKey>('newest')
   const [working, setWorking] = useState(false)
@@ -71,6 +73,7 @@ export function TrashList({ initialNotes }: TrashListProps) {
     }
     if (failedCount > 0) alert(`${failedCount}件の復元に失敗しました`)
     setWorking(false)
+    router.refresh()
   }
 
   const handlePermanentDelete = async () => {
@@ -97,6 +100,7 @@ export function TrashList({ initialNotes }: TrashListProps) {
     }
     if (failedCount > 0) alert(`${failedCount}件の削除に失敗しました`)
     setWorking(false)
+    router.refresh()
   }
 
   return (
