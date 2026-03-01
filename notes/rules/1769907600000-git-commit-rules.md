@@ -1,13 +1,12 @@
 ---
 title: Git コミットメッセージルール
-status: raw
+status: trashed
 category: rules
 ai_outcome: keep
 ai_reviewed: false
 createdAt: '2026-02-01T01:00:00.000Z'
-updatedAt: '2026-02-01T01:00:00.000Z'
+updatedAt: '2026-03-01T06:43:41.186Z'
 ---
-
 ## フォーマット
 
 ```
