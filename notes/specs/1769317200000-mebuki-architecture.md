@@ -5,7 +5,7 @@ category: specs
 ai_outcome: keep
 ai_reviewed: true
 createdAt: '2026-01-25T05:00:00.000Z'
-updatedAt: '2026-03-01T11:20:14.234Z'
+updatedAt: '2026-03-01T11:20:16.672Z'
 ---
 ## 概要
 
