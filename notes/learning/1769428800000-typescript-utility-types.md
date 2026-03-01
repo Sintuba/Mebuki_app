@@ -1,11 +1,11 @@
 ---
 title: TypeScript ユーティリティ型まとめ
-status: stable
+status: trashed
 category: learning
 ai_outcome: none
 ai_reviewed: true
 createdAt: '2026-01-26T12:00:00.000Z'
-updatedAt: '2026-03-01T02:52:43.956Z'
+updatedAt: '2026-03-01T06:46:12.777Z'
 ---
 TypeScriptには、既存の型から新しい型を派生させるための便利な「ユーティリティ型」が多数用意されています。これらを活用することで、型の柔軟性を高め、コードの保守性や再利用性を向上させることができます。
 
