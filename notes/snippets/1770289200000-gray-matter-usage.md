@@ -1,11 +1,11 @@
 ---
 title: gray-matter フロントマター処理
-status: trashed
+status: raw
 category: snippets
 ai_outcome: keep
 ai_reviewed: false
 createdAt: '2026-02-05T11:00:00.000Z'
-updatedAt: '2026-03-01T06:46:20.628Z'
+updatedAt: '2026-03-01T06:48:12.554Z'
 ---
 ## パース
 
