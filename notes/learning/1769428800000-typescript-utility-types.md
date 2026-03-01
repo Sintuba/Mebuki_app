@@ -2,10 +2,10 @@
 title: TypeScript ユーティリティ型まとめ
 status: stable
 category: learning
-ai_outcome: promote
+ai_outcome: keep
 ai_reviewed: true
 createdAt: '2026-01-26T12:00:00.000Z'
-updatedAt: '2026-03-01T00:42:25.115Z'
+updatedAt: '2026-03-01T00:46:12.902Z'
 ---
 ## よく使うユーティリティ型
 
