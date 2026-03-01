@@ -42,53 +42,61 @@ export function TrashList({ initialNotes }: TrashListProps) {
   const handleRestore = async () => {
     if (!window.confirm(`選択中の ${selectionCount} 件を未整理に戻しますか？`)) return
     setWorking(true)
-    try {
-      await Promise.all(
-        ctx.selectedNotes.map((n) =>
-          fetch(`/api/notes/${n.category}/${n.id}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              title: n.title,
-              content: n.content,
-              status: 'raw',
-              ai_outcome: n.ai_outcome,
-              ai_reviewed: n.ai_reviewed,
-              sha: n.sha,
-              createdAt: n.createdAt,
-            }),
-          })
-        )
-      )
-      setNotes((prev) => prev.filter((n) => !ctx.isSelected(n.id, n.category)))
-      ctx.clear()
-    } catch {
-      alert('復元に失敗しました')
-    } finally {
-      setWorking(false)
+    const toRestore = [...ctx.selectedNotes]
+    let failedCount = 0
+    for (const n of toRestore) {
+      try {
+        const res = await fetch(`/api/notes/${n.category}/${n.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: n.title,
+            content: n.content,
+            status: 'raw',
+            ai_outcome: n.ai_outcome,
+            ai_reviewed: n.ai_reviewed,
+            sha: n.sha,
+            createdAt: n.createdAt,
+          }),
+        })
+        if (res.ok) {
+          setNotes((prev) => prev.filter((x) => !(x.id === n.id && x.category === n.category)))
+          ctx.remove(n.id, n.category)
+        } else {
+          failedCount++
+        }
+      } catch {
+        failedCount++
+      }
     }
+    if (failedCount > 0) alert(`${failedCount}件の復元に失敗しました`)
+    setWorking(false)
   }
 
   const handlePermanentDelete = async () => {
     if (!window.confirm(`選択中の ${selectionCount} 件を完全に削除しますか？この操作は取り消せません。`)) return
     setWorking(true)
-    try {
-      await Promise.all(
-        ctx.selectedNotes.map((n) =>
-          fetch(`/api/notes/${n.category}/${n.id}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ sha: n.sha }),
-          })
-        )
-      )
-      setNotes((prev) => prev.filter((n) => !ctx.isSelected(n.id, n.category)))
-      ctx.clear()
-    } catch {
-      alert('削除に失敗しました')
-    } finally {
-      setWorking(false)
+    const toDelete = [...ctx.selectedNotes]
+    let failedCount = 0
+    for (const n of toDelete) {
+      try {
+        const res = await fetch(`/api/notes/${n.category}/${n.id}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sha: n.sha }),
+        })
+        if (res.ok) {
+          setNotes((prev) => prev.filter((x) => !(x.id === n.id && x.category === n.category)))
+          ctx.remove(n.id, n.category)
+        } else {
+          failedCount++
+        }
+      } catch {
+        failedCount++
+      }
     }
+    if (failedCount > 0) alert(`${failedCount}件の削除に失敗しました`)
+    setWorking(false)
   }
 
   return (
