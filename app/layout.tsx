@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'MEBUKI',
   description: '思考の小さな芽を、構造化されたナレッジに昇華する',
+  manifest: '/manifest.webmanifest',
   icons: {
     apple: '/apple-touch-icon.png',
   },
