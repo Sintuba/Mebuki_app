@@ -18,8 +18,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return (profile as { login?: string })?.login === allowedUser
     },
     authorized({ auth, request: { nextUrl } }) {
+      const { pathname } = nextUrl;
+      // PWA・静的アセットは認証不要（Chrome の PWA チェックが未認証で行われるため）
+      if (
+        pathname === '/manifest.webmanifest' ||
+        pathname === '/manifest.json' ||
+        pathname === '/sw.js' ||
+        pathname.startsWith('/api/auth/') ||
+        /\.(?:png|svg|ico|jpg|webp|css|woff2?)$/.test(pathname)
+      ) {
+        return true;
+      }
       const isLoggedIn = !!auth?.user;
-      const isOnLogin = nextUrl.pathname.startsWith("/login");
+      const isOnLogin = pathname.startsWith("/login");
       if (isLoggedIn && isOnLogin) {
         return Response.redirect(new URL("/", nextUrl));
       }
