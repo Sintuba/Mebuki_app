@@ -1,13 +1,12 @@
 ---
 title: Mebuki システムアーキテクチャ
-status: stable
+status: refining
 category: specs
 ai_outcome: keep
 ai_reviewed: true
 createdAt: '2026-01-25T05:00:00.000Z'
-updatedAt: '2026-02-15T05:00:00.000Z'
+updatedAt: '2026-03-01T06:45:50.593Z'
 ---
-
 ## 概要
 
 芽吹き（Mebuki）は、思考を育てるノートアプリ。メモが raw → refining → stable と成長する。
