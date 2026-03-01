@@ -8,7 +8,9 @@ import { PromoteModal } from '@/components/promote-modal'
 import { MdEditor } from '@/components/md-editor'
 import { AiChoicePanel } from '@/components/ai-choice-panel'
 import type { AiChoice } from '@/components/ai-choice-panel'
-import type { NoteStatus, AiOutcome, AiEditRecord } from '@/types/note'
+import { SproutPanel } from '@/components/sprout-panel'
+import type { SproutCandidate } from '@/components/sprout-panel'
+import type { NoteStatus, AiOutcome, AiEditRecord, NoteCategory } from '@/types/note'
 
 const STATUS_ORDER: NoteStatus[] = ['raw', 'refining', 'stable']
 
@@ -51,6 +53,12 @@ export default function EditorPage({
   const [aiChoicesLoading, setAiChoicesLoading] = useState(false)
   const [aiChoices, setAiChoices] = useState<AiChoice[]>([])
   const [aiChoicesError, setAiChoicesError] = useState('')
+
+  // 芽吹き
+  const [sproutOpen, setSproutOpen] = useState(false)
+  const [sproutLoading, setSproutLoading] = useState(false)
+  const [sprouts, setSprouts] = useState<SproutCandidate[]>([])
+  const [sproutError, setSproutError] = useState('')
 
   // GitHub の sha（更新時に必要）
   const shaRef = useRef<string | undefined>(undefined)
@@ -214,6 +222,27 @@ export default function EditorPage({
     setStatus(demoteStatus(status))
   }
 
+  const handleSprout = async () => {
+    setSproutOpen(true)
+    setSproutLoading(true)
+    setSprouts([])
+    setSproutError('')
+    try {
+      const res = await fetch('/api/ai/sprouts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content, category }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || '芽吹き候補の抽出に失敗しました')
+      setSprouts(data.sprouts ?? [])
+    } catch (e) {
+      setSproutError(e instanceof Error ? e.message : '芽吹き候補の抽出に失敗しました')
+    } finally {
+      setSproutLoading(false)
+    }
+  }
+
   const handleAiChoices = async () => {
     setAiChoicesOpen(true)
     setAiChoicesLoading(true)
@@ -287,6 +316,7 @@ export default function EditorPage({
         status={status}
         saving={saving}
         aiChoicesLoading={aiChoicesLoading}
+        sproutLoading={sproutLoading}
         onSave={() => handleSave()}
         onPromote={() => setPromoteOpen(true)}
         onDemote={handleDemote}
@@ -296,6 +326,7 @@ export default function EditorPage({
           )
         }}
         onAiChoices={!isNew ? handleAiChoices : undefined}
+        onSprout={!isNew ? handleSprout : undefined}
       />
 
       <PromoteModal
@@ -312,6 +343,16 @@ export default function EditorPage({
         error={aiChoicesError}
         onClose={() => setAiChoicesOpen(false)}
         onApply={(newContent) => setContent(newContent)}
+      />
+
+      <SproutPanel
+        open={sproutOpen}
+        loading={sproutLoading}
+        sprouts={sprouts}
+        error={sproutError}
+        category={category as NoteCategory}
+        onClose={() => setSproutOpen(false)}
+        onSprouted={() => setSproutOpen(false)}
       />
 
       {/* 未保存確認オーバーレイ */}

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Sparkles } from 'lucide-react'
+import { Sparkles, Sprout } from 'lucide-react'
 import type { NoteStatus, AiOutcome, AiEditRecord } from '@/types/note'
 import { STATUS_LABELS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
@@ -18,11 +18,13 @@ interface EditorToolbarProps {
   status: NoteStatus
   saving?: boolean
   aiChoicesLoading?: boolean
+  sproutLoading?: boolean
   onSave: () => void
   onPromote: () => void
   onDemote: () => void
   onYamlCopy: () => void
   onAiChoices?: () => void
+  onSprout?: () => void
 }
 
 function AiOutcomeControl({ value, onChange, compact = false }: {
@@ -79,7 +81,8 @@ export function EditorToolbar({
   aiOutcome, onAiOutcomeChange, aiReviewed, aiEdits = [],
   hasChanges, hasContent, status, saving = false,
   aiChoicesLoading = false,
-  onSave, onPromote, onDemote, onYamlCopy, onAiChoices,
+  sproutLoading = false,
+  onSave, onPromote, onDemote, onYamlCopy, onAiChoices, onSprout,
 }: EditorToolbarProps) {
   const currentIdx = STATUS_ORDER.indexOf(status)
   const canPromote = currentIdx < STATUS_ORDER.length - 1
@@ -110,6 +113,21 @@ export function EditorToolbar({
             )}
           >
             <Sparkles className={cn('size-3.5', aiChoicesLoading && 'animate-pulse')} />
+          </button>
+        )}
+        {onSprout && hasContent && (
+          <button
+            onClick={onSprout}
+            disabled={sproutLoading}
+            title="芽吹き候補を探す"
+            className={cn(
+              'h-8 w-8 rounded border transition-colors shrink-0 flex items-center justify-center',
+              sproutLoading
+                ? 'border-green-300 text-green-400'
+                : 'border-green-300 text-green-600 hover:bg-green-50'
+            )}
+          >
+            <Sprout className={cn('size-3.5', sproutLoading && 'animate-pulse')} />
           </button>
         )}
         <button onClick={onSave} disabled={saving || !hasChanges}
@@ -161,6 +179,22 @@ export function EditorToolbar({
           >
             <Sparkles className={cn('size-3', aiChoicesLoading && 'animate-pulse')} />
             {aiChoicesLoading ? '考え中...' : 'AI提案'}
+          </button>
+        )}
+        {onSprout && hasContent && (
+          <button
+            onClick={onSprout}
+            disabled={sproutLoading}
+            title="芽吹き候補を探す"
+            className={cn(
+              'flex items-center gap-1.5 text-[11px] px-2.5 h-7 rounded border transition-colors shrink-0',
+              sproutLoading
+                ? 'border-green-200 text-green-400'
+                : 'border-green-300 text-green-600 hover:bg-green-50'
+            )}
+          >
+            <Sprout className={cn('size-3', sproutLoading && 'animate-pulse')} />
+            {sproutLoading ? '探し中...' : '芽吹く'}
           </button>
         )}
         <button onClick={onSave} disabled={saving || !hasChanges}
