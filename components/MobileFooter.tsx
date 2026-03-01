@@ -88,7 +88,8 @@ export default function MobileFooter() {
         </>
       )}
 
-      <footer className="flex md:hidden fixed bottom-0 left-0 right-0 h-14 border-t border-border bg-background z-30 overflow-visible">
+      <footer className="flex md:hidden fixed bottom-0 left-0 right-0 border-t border-border bg-background z-30 overflow-visible flex-col">
+        <div className="flex h-14">
         {/* ホーム */}
         <Link
           href="/home"
@@ -123,6 +124,9 @@ export default function MobileFooter() {
           </svg>
           <span className="text-[10px]">リスト</span>
         </button>
+        </div>
+        {/* iOS ホームインジケーター safe area */}
+        <div style={{ height: 'env(safe-area-inset-bottom)' }} />
       </footer>
     </>
   );
