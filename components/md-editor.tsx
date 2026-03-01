@@ -216,8 +216,8 @@ interface MdEditorProps {
 
 export function MdEditor({ value, onChange, disabled }: MdEditorProps) {
   const taRef   = useRef<HTMLTextAreaElement>(null)
-  const [viewMode, setViewMode] = useState<ViewMode>('split')
-  const [spMode,   setSpMode]   = useState<SpMode>('edit')
+  const [viewMode, setViewMode] = useState<ViewMode>('preview')
+  const [spMode,   setSpMode]   = useState<SpMode>('preview')
 
   const insert = (action: InsertAction) => insertMd(taRef.current, onChange, action)
 
