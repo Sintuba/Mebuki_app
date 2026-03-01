@@ -15,6 +15,7 @@ const STATUS_LABELS: Record<NoteStatus, string> = {
   raw: '生メモ',
   refining: '精錬中',
   stable: '完成',
+  trashed: '宿根',
 }
 
 type Phase = 'list' | 'reviewing' | 'results'
